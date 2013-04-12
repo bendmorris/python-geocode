@@ -20,13 +20,13 @@ pickle_path = os.path.join(pickle_dir, 'latlons.pkl')
 
 try:
     with open(pickle_path) as pkl_file:
-        latlons = pickle.load(pkl_file)
-except: latlons = {}
+        _latlons = pickle.load(pkl_file)
+except: _latlons = {}
 
 
 def save_cache():
     with open(pickle_path, 'w') as pkl_file:
-        pickle.dump(latlons, pkl_file, -1)
+        pickle.dump(_latlons, pkl_file, -1)
 
 
 def latlon(location, throttle=0.5, center=True, round_digits=2):
@@ -41,8 +41,12 @@ def latlon(location, throttle=0.5, center=True, round_digits=2):
 
     global last_read
 
-    if location in latlons:
-        result = latlons[location]
+    if isinstance(location, list):
+        return map(lambda x: latlon(x, throttle=throttle, center=center, round_digits=round_digits),
+                   location)
+
+    if location in _latlons:
+        result = _latlons[location]
         if center:
             lat1, lon1, lat2, lon2 = result
             result = (lat1+lat2)/2, (lon1+lon2)/2
@@ -73,7 +77,7 @@ def latlon(location, throttle=0.5, center=True, round_digits=2):
         except IndexError:
             raise NoResultError('No result was found for location %s' % location)
 
-        latlons[location] = (lat1, lon1, lat2, lon2)
+        _latlons[location] = (lat1, lon1, lat2, lon2)
         save_cache()
 
         if center: return round((lat1+lat2)/2, round_digits), round((lon1+lon2)/2, round_digits)
