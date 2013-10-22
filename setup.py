@@ -12,4 +12,9 @@ setup(name='geocode',
       package_dir={
                    'geocode':''
                    },
+      entry_points={
+        'console_scripts': [
+            'geocode = geocode.__main__:main',
+        ],
+      },
       )
