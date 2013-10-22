@@ -50,7 +50,7 @@ def latlon(location, throttle=0.5, center=True, round_digits=2):
         if center:
             lat1, lon1, lat2, lon2 = result
             result = (lat1+lat2)/2, (lon1+lon2)/2
-        return tuple([round(n) for n in result])
+        return tuple([round(n, round_digits) for n in result])
 
     while time.time() - last_read < throttle:
         pass
