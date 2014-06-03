@@ -93,5 +93,7 @@ if __name__ == '__main__':
     input = True
 
     while input:
-        input = raw_input('Enter the name of a location: ')
-        print latlon(input)
+        try:
+            input = raw_input('Enter the name of a location: ')
+            if input: print latlon(input)
+        except EOFError: break
